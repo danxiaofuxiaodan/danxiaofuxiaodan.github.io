@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YA-WT-10 直角外推窗</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #f5f5f5;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* ===== Language Selector ===== */
+.lang-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.lang-screen .logo-area {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.lang-screen .brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.lang-screen .product-code {
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 1px;
+}
+
+.lang-screen h2 {
+  color: rgba(255,255,255,0.9);
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 40px;
+  letter-spacing: 1px;
+}
+
+.lang-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 24px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-decoration: none;
+}
+
+.lang-btn:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.6);
+  transform: translateY(-2px);
+}
+
+.lang-btn .flag {
+  font-size: 28px;
+}
+
+.lang-btn .label {
+  font-weight: 500;
+}
+
+.lang-btn .sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+}
+
+/* ===== Main Content ===== */
+.main-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+  display: none;
+}
+
+.main-content.show {
+  display: block;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+  color: #fff;
+  padding: 24px 20px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.header .lang-switcher {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.header .lang-switcher button {
+  padding: 6px 14px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 20px;
+  background: transparent;
+  color: rgba(255,255,255,0.8);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.header .lang-switcher button.active {
+  background: #fff;
+  color: #1a1a2e;
+  border-color: #fff;
+  font-weight: 600;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.header .model {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Product Description Card */
+.desc-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.desc-card h3 {
+  font-size: 17px;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #0f3460;
+}
+
+.desc-card .desc-list {
+  list-style: none;
+}
+
+.desc-card .desc-list li {
+  padding: 14px 0 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  line-height: 1.6;
+  position: relative;
+}
+
+.desc-card .desc-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  background: #0f3460;
+  border-radius: 2px;
+}
+
+.desc-card .desc-list li:last-child {
+  border-bottom: none;
+}
+
+.desc-card .desc-list li strong {
+  display: block;
+  font-size: 15px;
+  color: #0f3460;
+  margin-bottom: 4px;
+}
+
+/* Specs Table */
+.specs-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.specs-card h3 {
+  font-size: 17px;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #0f3460;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+table thead th {
+  position: sticky;
+  top: 0;
+  background: #1a1a2e;
+  color: #fff;
+  padding: 10px 6px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+table thead th.group {
+  background: #0f3460;
+  font-size: 12px;
+}
+
+table tbody td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+table tbody tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+table tbody tr:hover {
+  background: #e8f0fe;
+}
+
+
+table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+  font-size: 12px;
+}
+
+/* ===== Back to top ===== */
+.back-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a1a2e;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  display: none;
+  z-index: 100;
+  transition: transform 0.2s;
+}
+
+.back-top:hover {
+  transform: scale(1.1);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .header h1 { font-size: 19px; }
+  .lang-btn { padding: 16px 20px; font-size: 16px; }
+  .desc-card .desc-list li { font-size: 13px; }
+  table { font-size: 13px; }
+  table thead th { font-size: 11px; padding: 8px 4px; }
+  table tbody td { padding: 6px 4px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Language Selection Screen ===== -->
+<div class="lang-screen" id="langScreen">
+  <div class="logo-area">
+    <div class="brand">YA-WT-10</div>
+    <div class="product-code">Caravan Windows</div>
+  </div>
+  <h2 id="langTitle">Select Language / Sprache wählen / 请选择语言</h2>
+  <div class="lang-buttons">
+    <button class="lang-btn" onclick="showContent('en')">
+      <span class="label">English</span>
+    </button>
+    <button class="lang-btn" onclick="showContent('de')">
+      <span class="label">Deutsch</span>
+    </button>
+    <button class="lang-btn" onclick="showContent('zh')">
+      <span class="label">中文</span>
+    </button>
+  </div>
+</div>
+
+<!-- ===== Main Content ===== -->
+<div class="main-content" id="mainContent">
+  <div class="header">
+    <div class="lang-switcher">
+      <button onclick="switchLang('en')" id="btnEn">English</button>
+      <button onclick="switchLang('de')" id="btnDe">Deutsch</button>
+      <button onclick="switchLang('zh')" id="btnZh">中文</button>
+    </div>
+    <h1 id="h1Title"></h1>
+    <div class="model">YA-WT-10</div>
+  </div>
+
+  <!-- Description -->
+  <div class="desc-card">
+    <h3 id="descH3"></h3>
+    <ul class="desc-list" id="descList"></ul>
+  </div>
+
+  <!-- Specifications -->
+  <div class="specs-card">
+    <h3 id="specsH3"></h3>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th id="thCutout"></th>
+            <th id="thOverall"></th>
+            <th id="thWeight"></th>
+          </tr>
+        </thead>
+        <tbody id="specsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer" id="footerText"></div>
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="返回顶部">↑</button>
+
+<script>
+// ===== Multi-language Data =====
+const i18n = {
+  zh: {
+    pageTitle: "YA-WT-10 直角外推窗",
+    descTitle: "产品描述：",
+    items: [
+      { label: "窗框", text: "高强度铝合金材质，颜色主要有黑色，可根据客户需求定制。" },
+      { label: "玻璃", text: "双层抗紫外线的亚克力玻璃，外平，颜色可选黑色或者浅灰色。" },
+      { label: "支撑杆", text: "搭配无档位自由伸缩式不锈钢支撑杆。" },
+      { label: "把手", text: "带锁把手。" },
+      { label: "纱窗", text: "折叠式和卷轴式纱窗遮阳帘两种可选，框架有PVC框架和铝合金框架两种可选。" },
+      { label: "认证", text: "通过E-Mark和DOT认证。" },
+      { label: "安装方式", text: "使用安装框安装。" },
+      { label: "墙体厚度", text: "25-40mm、30-45mm、35-50mm、50-60mm。" }
+    ],
+    specsTitle: "规格尺寸：",
+    thCutout: "开口尺寸 (mm)<br>W×H",
+    thOverall: "外形尺寸 (mm)<br>(W+35)×(H+35)",
+    thWeight: "重量 (kg)",
+    footer: "YA-WT-10 Series Caravan Windows | Exhibition Product Info",
+    backTop: "返回顶部"
+  },
+  en: {
+    pageTitle: "YA-WT-10 Top-Hung Hinged Window (Right Angle)",
+    descTitle: "Product Description:",
+    items: [
+      { label: "Frame", text: "High-quality aluminum alloy, standard in black, with customized color options." },
+      { label: "Glass", text: "Double-glazing acrylic, UV resistant, with a flat outer surface. Available in black or light gray." },
+      { label: "Window stays", text: "Equipped with step-less adjustable stainless steel window stays." },
+      { label: "Handle", text: "Handle with lock." },
+      { label: "Blind", text: "Can be equipped with roller or pleated blinds, with the option of PVC or aluminum frames." },
+      { label: "Certificate", text: "E-Mark and DOT certified." },
+      { label: "Wall thickness", text: "Compatible with wall thicknesses of 25-40mm, 30-45mm, 35-50mm, and 50-60mm, installed with a mounting frame." }
+    ],
+    specsTitle: "Specifications:",
+    thCutout: "Cut out (mm)<br>W×H",
+    thOverall: "Overall (mm)<br>(W+35)×(H+35)",
+    thWeight: "Weight (kg)",
+    footer: "YA-WT-10 Series Caravan Windows | Exhibition Product Info",
+    backTop: "Back to Top"
+  },
+  de: {
+    pageTitle: "YA-WT-10 Caravan Fenster",
+    descTitle: "Produktbeschreibung:",
+    items: [
+      { label: "Rahmen", text: "Hochwertige Aluminiumlegierung. Standardfarbe Schwarz; kundenspezifische Farben sind auf Anfrage erhältlich." },
+      { label: "Verglasung", text: "UV-beständige Acryl-Doppelverglasung mit flacher Außenscheibe. Erhältlich in schwarzer oder hellgrauer Tönung." },
+      { label: "Fensteraussteller", text: "Ausgestattet mit stufenlos verstellbaren Fensterausstellern aus Edelstahl." },
+      { label: "Griff", text: "Mit Schloss." },
+      { label: "Sonnenschutz", text: "Wahlweise Rollo oder Plissee mit PVC- oder Aluminiumrahmen." },
+      { label: "Zertifizierung", text: "E-Kennzeichnung und DOT-Zertifizierung." },
+      { label: "Wandstärke", text: "Geeignet für Wandstärken von 25-40 mm, 30-45 mm, 35-50 mm und 50-60 mm; Montage mit Montagerahmen." }
+    ],
+    specsTitle: "Technische Daten:",
+    thCutout: "Ausschnitt (mm)<br>B×H",
+    thOverall: "Außen (mm)<br>(B+35)×(H+35)",
+    thWeight: "Gewicht (kg)",
+    footer: "YA-WT-10 Serie Caravan Fenster | Ausstellungsproduktinfo",
+    backTop: "Nach oben"
+  }
+};
+
+// Specification data (same across all languages)
+const specsData = [
+  ["300 x 300", "335 x 335", "1.81"],
+  ["300 x 450", "335 x 485", "2.42"],
+  ["300 x 500", "335 x 535", "2.62"],
+  ["350 x 300", "385 x 335", "2.01"],
+  ["350 x 500", "385 x 535", "2.89"],
+  ["350 x 580", "385 x 615", "3.24"],
+  ["400 x 250", "435 x 285", "1.98"],
+  ["400 x 450", "435 x 485", "2.92"],
+  ["400 x 500", "435 x 535", "3.16"],
+  ["450 x 300", "485 x 335", "2.42"],
+  ["450 x 400", "485 x 435", "2.92"],
+  ["450 x 500", "485 x 535", "3.43"],
+  ["450 x 510", "485 x 545", "3.48"],
+  ["460 x 220", "495 x 255", "2.05"],
+  ["500 x 250", "535 x 285", "2.35"],
+  ["500 x 300", "535 x 335", "2.62"],
+  ["500 x 350", "535 x 385", "2.89"],
+  ["500 x 400", "535 x 435", "3.16"],
+  ["500 x 450", "535 x 485", "3.43"],
+  ["500 x 500", "535 x 535", "3.70"],
+  ["510 x 510", "545 x 545", "3.81"],
+  ["550 x 500", "585 x 535", "3.97"],
+  ["600 x 250", "635 x 285", "2.72"],
+  ["600 x 300", "635 x 335", "3.02"],
+  ["600 x 350", "635 x 385", "3.33"],
+  ["600 x 400", "635 x 435", "3.63"],
+  ["600 x 450", "635 x 485", "3.94"],
+  ["600 x 500", "635 x 535", "4.24"],
+  ["600 x 600", "635 x 635", "4.85"],
+  ["610 x 610", "645 x 645", "4.97"],
+  ["650 x 450", "685 x 485", "4.19"],
+  ["700 x 300", "735 x 335", "3.43"],
+  ["700 x 350", "735 x 385", "3.77"],
+  ["700 x 400", "735 x 435", "4.10"],
+  ["700 x 500", "735 x 535", "4.78"],
+  ["700 x 510", "735 x 545", "4.85"],
+  ["700 x 550", "735 x 585", "5.12"],
+  ["700 x 580", "735 x 615", "5.32"],
+  ["700 x 600", "735 x 635", "5.46"],
+  ["700 x 800", "735 x 835", "6.81"],
+  ["700 x 900", "735 x 935", "7.48"],
+  ["750 x 455", "785 x 490", "4.73"],
+  ["762 x 381", "797 x 416", "4.26"],
+  ["762 x 508", "797 x 543", "5.17"],
+  ["800 x 400", "835 x 435", "4.58"],
+  ["800 x 450", "835 x 485", "4.95"],
+  ["800 x 500", "835 x 535", "5.32"],
+  ["800 x 510", "835 x 545", "5.39"],
+  ["800 x 550", "835 x 585", "5.69"],
+  ["800 x 600", "835 x 635", "6.06"],
+  ["828 x 315", "863 x 350", "4.06"],
+  ["870 x 560", "905 x 595", "6.17"],
+  ["900 x 350", "935 x 385", "4.64"],
+  ["900 x 450", "935 x 485", "5.45"],
+  ["900 x 500", "935 x 535", "5.86"],
+  ["900 x 550", "935 x 585", "6.27"],
+  ["900 x 600", "935 x 635", "6.67"],
+  ["900 x 900", "935 x 935", "9.11"],
+  ["910 x 610", "945 x 645", "6.81"],
+  ["1000 x 250", "1035 x 285", "4.20"],
+  ["1000 x 450", "1035 x 485", "5.96"],
+  ["1000 x 500", "1035 x 535", "6.40"],
+  ["1000 x 510", "1035 x 545", "6.49"],
+  ["1000 x 800", "1035 x 835", "9.04"],
+  ["1100 x 300", "1135 x 335", "5.04"],
+  ["1100 x 450", "1135 x 485", "6.47"],
+  ["1100 x 500", "1135 x 535", "6.94"],
+  ["1100 x 550", "1135 x 585", "7.41"],
+  ["1100 x 600", "1135 x 635", "7.89"],
+  ["1125 x 620", "1160 x 655", "8.23"],
+  ["1200 x 300", "1235 x 335", "5.45"],
+  ["1200 x 350", "1235 x 385", "5.96"],
+  ["1200 x 455", "1235 x 490", "6.86"],
+  ["1200 x 500", "1235 x 535", "7.48"],
+  ["1200 x 600", "1235 x 635", "8.50"],
+  ["1200 x 700", "1235 x 735", "9.51"],
+  ["1200 x 800", "1235 x 835", "10.53"],
+  ["1300 x 510", "1335 x 545", "8.13"],
+  ["1300 x 550", "1335 x 585", "8.56"],
+  ["1300 x 580", "1335 x 615", "8.89"],
+  ["1300 x 600", "1335 x 635", "9.10"],
+  ["1400 x 575", "1435 x 610", "9.42"],
+  ["1450 x 550", "1485 x 585", "9.42"],
+  ["1570 x 575", "1605 x 610", "10.43"]
+];
+
+
+let currentLang = 'zh';
+
+// ===== Show content (from language selection screen) =====
+function showContent(lang) {
+  currentLang = lang;
+  document.getElementById('langScreen').style.display = 'none';
+  document.getElementById('mainContent').classList.add('show');
+  updateContent(lang);
+  updateLangButtons(lang);
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ===== Switch language =====
+function switchLang(lang) {
+  currentLang = lang;
+  updateContent(lang);
+  updateLangButtons(lang);
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ===== Update content based on language =====
+function updateContent(lang) {
+  const t = i18n[lang];
+  document.title = t.pageTitle;
+  document.getElementById('h1Title').textContent = t.pageTitle;
+  document.getElementById('descH3').textContent = t.descTitle;
+  document.getElementById('specsH3').textContent = t.specsTitle;
+  document.getElementById('footerText').textContent = t.footer;
+  document.getElementById('backTop').title = t.backTop;
+
+  // Table headers
+  document.getElementById('thCutout').innerHTML = t.thCutout;
+  document.getElementById('thOverall').innerHTML = t.thOverall;
+  document.getElementById('thWeight').innerHTML = t.thWeight;
+  // Description list
+  const descList = document.getElementById('descList');
+  descList.innerHTML = t.items.map(item => 
+    `<li><strong>${item.label}：</strong>${item.text}</li>`
+  ).join('');
+
+  // Generate specs table body
+  const tbody = document.getElementById('specsBody');
+  tbody.innerHTML = specsData.map(row =>
+    `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td></tr>`
+  ).join('');
+}
+
+// ===== Update language button states =====
+function updateLangButtons(lang) {
+  ['zh','en','de'].forEach(l => {
+    const btn = document.getElementById('btn' + l.charAt(0).toUpperCase() + l.slice(1));
+    if (btn) {
+      btn.classList.toggle('active', l === lang);
+    }
+  });
+}
+
+// ===== Back to top button visibility =====
+window.addEventListener('scroll', function() {
+  const btn = document.getElementById('backTop');
+  btn.style.display = window.scrollY > 300 ? 'block' : 'none';
+});
+
+// ===== Generate specs on initial load =====
+(function() {
+  const tbody = document.getElementById('specsBody');
+  tbody.innerHTML = specsData.map(row =>
+    `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td></tr>`
+  ).join('');
+})();
+</script>
+</body>
+</html>
